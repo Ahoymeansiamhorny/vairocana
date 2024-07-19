@@ -54,7 +54,7 @@
       <el-input v-model="personalForm.emergencyContactFriendMobile" />
     </el-form-item>
     <el-form-item label="是否曾參加禪七修行活動">
-      <el-radio-group v-model="personalForm.attendedZenRetreat">
+      <el-radio-group v-model.number="personalForm.attendedZenRetreat">
         <el-radio-button label="2">是</el-radio-button>
         <el-radio-button label="1">否</el-radio-button>
       </el-radio-group>
@@ -63,7 +63,7 @@
       <el-input v-model="personalForm.zenRetreatLocation" />
     </el-form-item>
     <el-form-item label="是否曾參加佛七修行活動">
-      <el-radio-group v-model="personalForm.attendedBuddhistRetreat">
+      <el-radio-group v-model.number="personalForm.attendedBuddhistRetreat">
         <el-radio-button label="2">是</el-radio-button>
         <el-radio-button label="1">否</el-radio-button>
       </el-radio-group>
@@ -158,7 +158,7 @@
       <el-input v-model="personalForm.otherSupplementsDetail" type="textarea" />
     </el-form-item>
     <el-form-item label="是否服用藥物">
-      <el-radio-group v-model="personalForm.takingMedication">
+      <el-radio-group v-model.number="personalForm.takingMedication">
         <el-radio-button label="2">是</el-radio-button>
         <el-radio-button label="1">否</el-radio-button>
       </el-radio-group>
@@ -213,9 +213,9 @@ const personalForm = reactive({
   emergencyContactFriend: '',
   emergencyContactFriendPhone: '',
   emergencyContactFriendMobile: '',
-  attendedZenRetreat: '',
+  attendedZenRetreat: 0,
   zenRetreatLocation: '',
-  attendedBuddhistRetreat: '',
+  attendedBuddhistRetreat: 0,
   buddhistEventLocation: '',
   classRecords: [],
   currentBloodPressure: '',
@@ -227,7 +227,7 @@ const personalForm = reactive({
   healthSupplements: '',
   healthSupplementFrequency: '',
   otherSupplementsDetail: '',
-  takingMedication: '',
+  takingMedication: 0,
   westernMedicineName: '',
   westernMedicinePurpose: '',
   westernMedicineMethod: '',
