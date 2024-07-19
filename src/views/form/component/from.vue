@@ -3,7 +3,7 @@
     v-model="visible"
     :destroy-on-close="true"
     :before-close="handleClose"
-    width="65%"
+    :width="dialogWidth"
     :title="t(`form.action.${drawerProps.title}`, { target: drawerProps.row.name })"
   >
     <el-form
@@ -211,7 +211,7 @@
 </template>
 
 <script setup>
-import { markRaw, ref } from 'vue'
+import { markRaw, ref, computed } from 'vue'
 import {
   ElForm,
   ElCheckbox,
@@ -239,7 +239,9 @@ const emit = defineEmits(['update:visible'])
 const close = () => emit('update:visible', false)
 
 const { t } = useI18n()
-
+const dialogWidth = computed(() => {
+  return window.innerWidth < 576 ? '95%' : '65%'
+})
 console.log(drawerProps.value.row);
 const personalForm = ref({
   name: '',
