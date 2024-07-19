@@ -72,13 +72,7 @@ import { useUserStore } from '@/stores/modules/user'
 import { useAuthStore } from '@/stores/modules/auth'
 import * as zod from 'zod'
 import { ACCOUNT_RULE, USERNAME_REGEXP } from '@/config/validate'
-import {
-  CreateRequest,
-  ListRequest,
-  UpdateRequest,
-  DeleteRequest,
-  ListDirectRequest
-} from '@/api/manager/manager'
+import { CreateRequest, ListRequest, UpdateRequest, DeleteRequest } from '@/api/form/form'
 import { RoleRequest } from '@/api/selection/selection'
 
 const userStore = useUserStore()
