@@ -39,7 +39,7 @@
           :loading="isSubmitting"
           :disabled="isSubmitting"
         >
-        登入
+          登入
         </el-button>
       </div>
     </el-form-item>
@@ -64,7 +64,8 @@ import {
   formConfig,
   PASSWORD_ACCOUNT_CANNOT_BE_SAME,
   USERNAME_REGEXP,
-  PASSWORD_REGEXP
+  PASSWORD_REGEXP,
+  ZOD_STRING
 } from '@/config/validate/index.js'
 import * as zod from 'zod'
 import { LoginRequest } from '@/api/auth/auth'
@@ -77,8 +78,8 @@ const keepAliveStore = useKeepAliveStore()
 const refineRule = ({ username, password }) => username !== password
 const schema = zod
   .object({
-    username: zod.string().regex(new RegExp(USERNAME_REGEXP), ACCOUNT_RULE),
-    password: zod.string().regex(new RegExp(PASSWORD_REGEXP), PASSWORD_RULE)
+    username: ZOD_STRING.regex(new RegExp(USERNAME_REGEXP), ACCOUNT_RULE),
+    password: ZOD_STRING.regex(new RegExp(PASSWORD_REGEXP), PASSWORD_RULE)
   })
   .refine(refineRule, { message: PASSWORD_ACCOUNT_CANNOT_BE_SAME, path: ['username'] })
   .refine(refineRule, { message: PASSWORD_ACCOUNT_CANNOT_BE_SAME, path: ['password'] })
