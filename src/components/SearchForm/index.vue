@@ -34,7 +34,7 @@
             <el-button :icon="Refresh" @click="reset">
               {{ t('form.action.reset') }}
             </el-button>
-            <el-button
+            <!-- <el-button
               v-if="showCollapse"
               type="primary"
               link
@@ -45,7 +45,7 @@
               <el-icon class="el-icon--right">
                 <component :is="collapsed ? ArrowDown : ArrowUp"></component>
               </el-icon>
-            </el-button>
+            </el-button> -->
           </div>
         </GridItem>
       </Grid>

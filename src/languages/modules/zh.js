@@ -195,7 +195,7 @@ export default {
     },
     action: {
       search: '搜尋',
-      reset: '重置',
+      reset: '重設搜尋條件',
       edit: '編輯 {target}',
       create: '新增 {target}',
       view: '檢視 {target}',
