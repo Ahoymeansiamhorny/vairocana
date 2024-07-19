@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginFormRef" @submit="onSubmit" @reset="resetForm()" size="large">
     <el-form-item v-bind="usernameProps">
-      <el-input v-model="username" placeholder="用户名：admin / user">
+      <el-input v-model="username" placeholder="使用者名稱：admin / user">
         <template #prefix>
           <el-icon class="el-input__icon">
             <user />
@@ -13,7 +13,7 @@
       <el-input
         v-model="password"
         type="password"
-        placeholder="密码：123456"
+        placeholder="密碼：123456"
         show-password
         autocomplete="new-password"
       >
@@ -39,7 +39,7 @@
           :loading="isSubmitting"
           :disabled="isSubmitting"
         >
-          登录
+        登入
         </el-button>
       </div>
     </el-form-item>

@@ -13,7 +13,6 @@
     justify-content: space-around;
     width: 96.5%;
     height: 94%;
-    padding: 0 50px;
     background-color: rgb(255 255 255 / 80%);
     border-radius: 10px;
     .dark {
@@ -30,6 +29,7 @@
       }
     }
     .login-form {
+      box-sizing: border-box;
       width: 420px;
       padding: 50px 40px 45px;
       background-color: var(--el-bg-color);

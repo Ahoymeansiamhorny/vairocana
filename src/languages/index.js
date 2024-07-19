@@ -27,8 +27,8 @@ const i18n = createI18n({
   allowComposition: true,
   globalInjection: true,
   legacy: false,
-  locale: 'en', // getBrowserLang(),
-  fallbackLocale: 'en',
+  locale: 'zh', // getBrowserLang(),
+  fallbackLocale: 'zh',
   numberFormats,
   messages: {
     zh,

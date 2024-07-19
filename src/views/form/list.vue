@@ -1,5 +1,5 @@
 <template>
-  <div class="table-box" v-auth="['agentList', 'agentDirectList']">
+  <div class="table-box" v-auth="['managerList', 'managerDirectList']">
     <ProTable
       ref="proTable"
       :columns="columns"
@@ -12,22 +12,14 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader>
-        <div style="display: flex; margin-bottom: 5px">
-          <span v-if="userStore.userInfo.identify === 2" style="color: red">
-            Available: {{ key }} Pin Keys
-          </span>
-        </div>
-        <div style="display: flex; align-items: baseline">
-          <el-button
-            v-auth="['agentCreate']"
-            v-if="[1, 2].includes(userStore.userInfo.identify)"
-            type="primary"
-            :icon="CirclePlus"
-            @click="openDrawer('create')"
-          >
-            {{ t('form.action.create') }}
-          </el-button>
-        </div>
+        <el-button
+          v-auth="['managerCreate']"
+          type="primary"
+          :icon="CirclePlus"
+          @click="openDrawer('create')"
+        >
+          {{ t('form.action.create') }}
+        </el-button>
       </template>
 
       <!-- Expand -->
@@ -40,42 +32,42 @@
           {{ t('form.action.view') }}
         </el-button>
         <el-button
-          v-auth="['agentUpdate']"
-          v-if="scope.row.id !== userStore.userInfo.id"
+          v-auth="['managerUpdate']"
           type="primary"
           link
           :icon="EditPen"
           @click="openDrawer('edit', scope.row)"
+          :disabled="scope.row.id === userStore.userInfo.id"
         >
           {{ t('form.action.edit') }}
         </el-button>
 
         <el-button
-          v-if="scope.row.id !== userStore.userInfo.id"
+          v-auth="['managerDelete']"
           type="primary"
-          v-auth="['agentDelete']"
           link
           :icon="Delete"
           @click="deleteAccount(scope.row)"
+          :disabled="scope.row.id === userStore.userInfo.id"
         >
           {{ t('form.action.delete') }}
         </el-button>
       </template>
     </ProTable>
 
-    <UserDrawer v-if="dialog" v-model:visible="dialog" v-model:params="params" ref="drawerRef" />
+    <UserDrawer ref="drawerRef" v-if="dialog" v-model:visible="dialog" v-model:params="params" />
   </div>
 </template>
 
-<script setup name="agentAccountManage" lang="jsx">
-import { ref, reactive, markRaw, computed, watch } from 'vue'
+<script setup name="accountManage" lang="jsx">
+import { ref, reactive, markRaw } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { View, EditPen, CirclePlus, Delete, WarningFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import ProTable from '@/components/ProTable/index.vue'
-import { adminIdentify, adminStatus, bankList } from '@/utils/dict'
+import { adminStatus } from '@/utils/dict'
 import { toDate } from '@/utils/day'
-import UserDrawer from '@/views/agent/accountManage/components/UserDrawer.vue'
+import UserDrawer from '@/views/admin/accountManage/components/UserDrawer.vue'
 import { useUserStore } from '@/stores/modules/user'
 import { useAuthStore } from '@/stores/modules/auth'
 import * as zod from 'zod'
@@ -86,13 +78,11 @@ import {
   UpdateRequest,
   DeleteRequest,
   ListDirectRequest
-} from '@/api/agent/agent'
-import { AgentRoleRequest } from '@/api/selection/selection'
+} from '@/api/manager/manager'
+import { RoleRequest } from '@/api/selection/selection'
 
 const userStore = useUserStore()
 const authStore = useAuthStore()
-
-const key = computed(() => userStore.userInfo.key)
 // ProTable 实例
 const proTable = ref()
 
@@ -108,34 +98,21 @@ const params = ref({
 
 const { t } = useI18n()
 
-watch(
-  () => dialog.value,
-  (n) => {
-    if (!n) {
-      userStore
-        .getUserInfo()
-        .then(() => {})
-        .catch(() => {})
-    }
-  }
-)
-
 const getTableList = (params) => {
   if (
-    authStore.authButtonListGet.includes('agentDirectList') &&
-    authStore.authButtonListGet.includes('agentList')
+    authStore.authButtonListGet.includes('managerDirectList') &&
+    authStore.authButtonListGet.includes('managerList')
   ) {
     return ListRequest(params)
   }
 
-  if (authStore.authButtonListGet.includes('agentDirectList')) {
+  if (authStore.authButtonListGet.includes('managerDirectList')) {
     return ListDirectRequest(params)
   }
 
-  if (authStore.authButtonListGet.includes('agentList')) {
+  if (authStore.authButtonListGet.includes('managerList')) {
     return ListRequest(params)
   }
-  return ListDirectRequest(params)
 }
 
 // 如果表格需要初始化请求参数，直接定义传给 ProTable (之后每次请求都会自动带上该参数，此参数更改之后也会一直带上，改变此参数会自动刷新表格数据)
@@ -180,20 +157,9 @@ function deleteAccount({ id, username }) {
 const rule = {
   username: zod.string().regex(new RegExp(USERNAME_REGEXP), ACCOUNT_RULE).optional()
 }
-
 const columns = reactive([
   // { type: 'expand', label: '' },
   { prop: 'id', label: '#', width: 50 },
-  {
-    prop: 'link',
-    label: '',
-    render: (scope) => (
-      <span>
-        <Link style="width: 1.5em; height: 1.5em;" v-copy={scope.row.link} />
-      </span>
-    ),
-    width: 60
-  },
   {
     prop: 'username',
     label: t('form.fields.username'),
@@ -207,16 +173,16 @@ const columns = reactive([
     label: t('form.fields.mobile'),
     render: (scope) => <span v-copy={scope.row.mobile}>{scope.row.mobile}</span>
   },
-  // {
-  //   prop: 'whatapps',
-  //   label: t('form.fields.whatapps'),
-  //   render: (scope) => <span v-copy={scope.row.whatapps}>{scope.row.whatapps}</span>
-  // },
-  // {
-  //   prop: 'email',
-  //   label: t('form.fields.email'),
-  //   render: (scope) => <span v-copy={scope.row.email}>{scope.row.email}</span>
-  // },
+  {
+    prop: 'whatapps',
+    label: t('form.fields.whatapps'),
+    render: (scope) => <span v-copy={scope.row.whatapps}>{scope.row.whatapps}</span>
+  },
+  {
+    prop: 'email',
+    label: t('form.fields.email'),
+    render: (scope) => <span v-copy={scope.row.email}>{scope.row.email}</span>
+  },
   {
     prop: 'status',
     label: t('form.fields.status'),
@@ -233,64 +199,24 @@ const columns = reactive([
     width: 100
   },
   {
-    prop: 'rate',
-    label: t('form.fields.rate'),
-    render: (scope) => <span>{scope.row.rate}%</span>
-  },
-  {
     prop: 'roleIds',
     label: t('form.fields.roleIds'),
-    enum: AgentRoleRequest,
-    isShow: false
-  },
-  {
-    prop: 'bankId',
-    label: t('form.fields.bankId'),
-    enum: bankList(),
+    enum: RoleRequest,
+    search: { el: 'select-v2', props: { filterable: true, multiple: true } },
     fieldNames: { label: 'label', value: 'value' },
     render: (scope) => {
-      return (
-        <>
-          {scope.row.bankId ? (
-            <p style="display:grid;gap:5px;">
-              <el-tag type="warning">{t(`bank.${scope.row.bankId}`)}</el-tag>
-              <el-tag v-copy={scope.row.bankHolderName} type="warning">
-                {scope.row.bankHolderName}
-              </el-tag>
-              <el-tag v-copy={scope.row.bankNumber} type="warning">
-                {scope.row.bankNumber}
-              </el-tag>
-            </p>
-          ) : (
-            ''
-          )}
-        </>
-      )
+      const row = []
+      for (const i of scope.row.roleIds) {
+        const idx = proTable.value?.enumMap.get('roleIds').findIndex((o) => i === o.value)
+        if (idx !== -1) {
+          row.push(<el-tag type="info">{proTable.value?.enumMap.get('roleIds')[idx].label}</el-tag>)
+          row.push(<br />)
+        }
+      }
+      return row
     }
   },
   { prop: 'description', label: t('form.fields.description') },
-  {
-    prop: 'identify',
-    label: t('form.fields.identify'),
-    enum: adminIdentify().filter((i) => i.value > userStore.userInfo.identify),
-    search: { el: 'select', props: { filterable: true } },
-    fieldNames: { label: 'label', value: 'value' },
-    width: 135,
-    render: (scope) => {
-      return (
-        <>
-          {scope.row.identify ? (
-            <el-tag type={adminIdentify().find((i) => i.value === scope.row.identify)?.tagType}>
-              {t(adminIdentify().find((i) => i.value === scope.row.identify)?.label)}{' '}
-              {scope.row.identify === 2 ? `(${scope.row.key} Key)` : ``}
-            </el-tag>
-          ) : (
-            '---'
-          )}
-        </>
-      )
-    }
-  },
   {
     prop: 'createdAt',
     label: t('form.fields.createdAt'),
@@ -304,13 +230,12 @@ const drawerRef = ref(null)
 
 const openDrawer = (title = '', row) => {
   dialog.value = true
-
   params.value.title = title
   params.value.isView = title === 'view'
   params.value.row = { ...row }
-  params.value.api =
-    title === 'create' ? CreateRequest : title === 'edit' ? UpdateRequest : undefined
   params.value.getTableList = proTable.value?.getTableList
   params.value.enumMap = proTable.value?.enumMap
+  params.value.api =
+    title === 'create' ? CreateRequest : title === 'edit' ? UpdateRequest : undefined
 }
 </script>

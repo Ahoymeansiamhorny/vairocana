@@ -18,7 +18,7 @@ initTheme()
 const i18n = useI18n()
 onMounted(() => {
   i18n.locale.value = globalStore.language ?? getBrowserLang()
-  globalStore.setGlobalState('language', i18n.locale.value)
+  globalStore.setGlobalState('language', "zh")
   // globalStore.setGlobalState('layout', 'transverse')
   // globalStore.setGlobalState('assemblySize', 'default')
 })
