@@ -3,11 +3,11 @@
     <div class="header-icon">
       <!--      <Link style="width: 1.5em; height: 1.5em; margin-right: 8px; cursor: pointer" @click="href" />-->
       <!--      <el-button :icon="Link" round type="danger" @click="href" />-->
-      <AssemblySize style="display: none;" id="assemblySize" />
-      <Language style="display: none;" id="language" />
-      <SearchMenu style="display: none;" id="searchMenu" />
+      <AssemblySize style="display: none" id="assemblySize" />
+      <Language style="display: none" id="language" />
+      <SearchMenu style="display: none" id="searchMenu" />
       <ThemeSetting id="themeSetting" />
-      <Message style="display: none;" id="message" />
+      <Message style="display: none" id="message" />
       <!--      <Fullscreen id="fullscreen" />-->
     </div>
     <span class="username">{{ username }}</span>
@@ -25,29 +25,9 @@ import ThemeSetting from './components/ThemeSetting.vue'
 import Message from './components/Message.vue'
 // import Fullscreen from './components/Fullscreen.vue'
 import Avatar from './components/Avatar.vue'
-// import { Link } from '@element-plus/icons-vue'
-import { useClipboard } from '@vueuse/core'
-import { ElMessage } from 'element-plus'
-import { useI18n } from 'vue-i18n'
 
 const userStore = useUserStore()
 const username = computed(() => userStore.userInfo.userName)
-
-const { t } = useI18n()
-const { isSupported, copy } = useClipboard()
-
-const href = () => {
-  if (isSupported) {
-    copy(userStore.userInfo.link)
-    ElMessage({
-      type: 'success',
-      dangerouslyUseHTMLString: true,
-      message: `${t('common.copySuccess')} <br/> ${userStore.userInfo.link}`
-    })
-  }
-  // window.open(userStore.userInfo.link)
-}
-console.log(href);
 </script>
 
 <style scoped lang="scss">

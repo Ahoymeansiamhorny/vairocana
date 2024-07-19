@@ -6,17 +6,15 @@
       :request-api="getTableList"
       :init-param="initParam"
       :data-callback="dataCallback"
-      @darg-sort="sortTable"
       :pagination="true"
-      :rule="rule"
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader>
         <el-button
-          v-auth="['formCreate']"
           type="primary"
           :icon="CirclePlus"
           @click="openDrawer('create')"
+          v-auth="['formCreate']"
         >
           {{ t('form.action.create') }}
         </el-button>
@@ -31,66 +29,53 @@
         <el-button type="primary" link :icon="View" @click="openDrawer('view', scope.row)">
           {{ t('form.action.view') }}
         </el-button>
+        <!--          :disabled="scope.row.id === 1 || scope.row.id === userStore.userInfo.id"-->
         <el-button
-          v-auth="['formUpdate']"
           type="primary"
           link
           :icon="EditPen"
           @click="openDrawer('edit', scope.row)"
-          :disabled="scope.row.id === userStore.userInfo.id"
+          v-auth="['formUpdate']"
         >
           {{ t('form.action.edit') }}
         </el-button>
 
         <el-button
-          v-auth="['formDelete']"
           type="primary"
           link
           :icon="Delete"
           @click="deleteAccount(scope.row)"
+          v-auth="['formDelete']"
         >
           {{ t('form.action.delete') }}
         </el-button>
       </template>
     </ProTable>
-
-    <UserDrawer ref="drawerRef" v-if="dialog" v-model:visible="dialog" v-model:params="params" />
+    <Drawer ref="drawerRef" v-if="dialog" v-model:visible="dialog" v-model:params="params" />
   </div>
 </template>
 
-<script setup name="accountManage" lang="jsx">
+<script setup name="formList" lang="jsx">
 import { ref, reactive, markRaw } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { View, EditPen, CirclePlus, Delete, WarningFilled } from '@element-plus/icons-vue'
+import { View, EditPen, Delete, CirclePlus, WarningFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import ProTable from '@/components/ProTable/index.vue'
 import { toDate } from '@/utils/day'
-import UserDrawer from '@/views/form/component/from.vue'
+import Drawer from '@/views/form/component/from.vue'
 import { useUserStore } from '@/stores/modules/user'
-import { useAuthStore } from '@/stores/modules/auth'
-import * as zod from 'zod'
-import { ACCOUNT_RULE, USERNAME_REGEXP } from '@/config/validate'
-import { CreateRequest, ListRequest, UpdateRequest, DeleteRequest } from '@/api/form/form'
+import { adminIdentify } from '@/utils/dict'
+import { CreateRequest, DeleteRequest, UpdateRequest, ListRequest } from '@/api/form/form'
+import { PermissionRequest } from '@/api/selection/selection'
 
 const userStore = useUserStore()
-const authStore = useAuthStore()
 // ProTable 实例
 const proTable = ref()
-
-const dialog = ref(false)
-const params = ref({
-  row: {},
-  api: void 0,
-  getTableList: void 0,
-  enumMap: new Map(),
-  isView: false,
-  title: 'view'
-})
 
 const { t } = useI18n()
 
 const getTableList = (params) => {
-  ListRequest(params)
+  return ListRequest(params)
 }
 
 // 如果表格需要初始化请求参数，直接定义传给 ProTable (之后每次请求都会自动带上该参数，此参数更改之后也会一直带上，改变此参数会自动刷新表格数据)
@@ -107,12 +92,33 @@ const dataCallback = (data) => {
   }
 }
 
-const sortTable = () => {
-  ElMessage.success('修改列表排序成功')
-}
+const columns = reactive([
+  { prop: 'id', label: '#', width: 50 },
+  {
+    prop: 'name',
+    label: t('form.fields.username'),
+    search: { el: 'input' },
+    render: (scope) => <span v-copy={scope.row.name}>{scope.row.name}</span>
+  },
+  {
+    prop: 'createdAt',
+    label: t('form.fields.createdAt'),
+    render: (scope) => {
+      return toDate(scope.row.createdAt)
+    }
+  },
+  {
+    prop: 'modifiedAt',
+    label: t('form.fields.modifiedAt'),
+    render: (scope) => {
+      return toDate(scope.row.modifiedAt)
+    }
+  },
+  { prop: 'operation', label: t('form.fields.operation'), fixed: 'right' }
+])
 
 function deleteAccount({ id, name }) {
-  ElMessageBox.confirm(t('common.confirmDelete', { name }), '', {
+  ElMessageBox.confirm(t('common.confirmDelete', { username: name }), '', {
     confirmButtonText: 'OK',
     type: 'warning',
     icon: markRaw(WarningFilled),
@@ -132,81 +138,21 @@ function deleteAccount({ id, name }) {
     .catch(() => {})
 }
 
-const rule = {
-  username: zod.string().regex(new RegExp(USERNAME_REGEXP), ACCOUNT_RULE).optional()
-}
-const columns = reactive([
-  // { type: 'expand', label: '' },
-  { prop: 'id', label: '#', width: 50 },
-  {
-    prop: 'name',
-    label: t('form.fields.username'),
-    search: { el: 'input' },
-    render: (scope) => <span v-copy={scope.row.name}>{scope.row.name}</span>
-  },
-  // { prop: 'nickname', label: t('form.fields.nickname') },
-  // {
-  //   prop: 'mobile',
-  //   label: t('form.fields.mobile'),
-  //   render: (scope) => <span v-copy={scope.row.mobile}>{scope.row.mobile}</span>
-  // },
-  // {
-  //   prop: 'whatapps',
-  //   label: t('form.fields.whatapps'),
-  //   render: (scope) => <span v-copy={scope.row.whatapps}>{scope.row.whatapps}</span>
-  // },
-  // {
-  //   prop: 'email',
-  //   label: t('form.fields.email'),
-  //   render: (scope) => <span v-copy={scope.row.email}>{scope.row.email}</span>
-  // },
-  // {
-  //   prop: 'status',
-  //   label: t('form.fields.status'),
-  //   enum: adminStatus(),
-  //   search: { el: 'select', props: { filterable: true } },
-  //   fieldNames: { label: 'label', value: 'value' },
-  //   render: (scope) => {
-  //     return (
-  //       <el-tag type={scope.row.status === 1 ? 'success' : 'danger'}>
-  //         {scope.row.status ? t(`enum.adminStatus.${scope.row.status}`) : '---'}
-  //       </el-tag>
-  //     )
-  //   },
-  //   width: 100
-  // },
-  // {
-  //   prop: 'roleIds',
-  //   label: t('form.fields.roleIds'),
-  //   enum: RoleRequest,
-  //   search: { el: 'select-v2', props: { filterable: true, multiple: true } },
-  //   fieldNames: { label: 'label', value: 'value' },
-  //   render: (scope) => {
-  //     const row = []
-  //     for (const i of scope.row.roleIds) {
-  //       const idx = proTable.value?.enumMap.get('roleIds').findIndex((o) => i === o.value)
-  //       if (idx !== -1) {
-  //         row.push(<el-tag type="info">{proTable.value?.enumMap.get('roleIds')[idx].label}</el-tag>)
-  //         row.push(<br />)
-  //       }
-  //     }
-  //     return row
-  //   }
-  // },
-  // { prop: 'description', label: t('form.fields.description') },
-  {
-    prop: 'createdAt',
-    label: t('form.fields.createdAt'),
-    render: (scope) => toDate(scope.row.createdAt)
-  },
-  { prop: 'operation', label: t('form.fields.operation'), fixed: 'right' }
-])
-
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref(null)
+const dialog = ref(false)
+const params = ref({
+  row: {},
+  api: void 0,
+  getTableList: void 0,
+  enumMap: new Map(),
+  isView: false,
+  title: 'view'
+})
 
 const openDrawer = (title = '', row) => {
   dialog.value = true
+
   params.value.title = title
   params.value.isView = title === 'view'
   params.value.row = { ...row }
