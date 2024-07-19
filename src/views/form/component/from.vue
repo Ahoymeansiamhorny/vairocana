@@ -247,7 +247,7 @@ const handleDateChange = (value) => {
 const submitForm = async() => {
   console.log('Form Data:', personalForm)
   try {
-    const response = await CreateRequest(personalForm.value);
+    const response = await CreateRequest(personalForm);
     console.log('Response:', response.data);
     // 在這裡處理成功的響應
   } catch (error) {
