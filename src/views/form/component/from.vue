@@ -14,6 +14,7 @@
       class="demo-ruleForm"
       :size="formSize"
       status-icon
+      :disabled="drawerProps.title === 'view'"
     >
       <el-form-item label="姓名">
         <el-input v-model="personalForm.name" />
@@ -200,7 +201,9 @@
         <el-input v-model="personalForm.chineseMedicineMethod" type="textarea" />
       </el-form-item>
       <el-form-item class="center">
-        <el-button type="primary" style="margin: 0 auto" @click="submitForm"> 建立 </el-button>
+        <el-button v-if="drawerProps.title === 'create' " type="primary" style="margin: 0 auto" @click="submitForm"> 建立 </el-button>
+        <el-button v-else type="primary" style="margin: 0 auto" @click="editForm"> 編輯 </el-button>
+
         <!-- <el-button @click="resetForm">清除</el-button> -->
       </el-form-item>
     </el-form>
@@ -208,7 +211,7 @@
 </template>
 
 <script setup>
-import { markRaw, reactive, ref } from 'vue'
+import { markRaw, ref } from 'vue'
 import {
   ElForm,
   ElCheckbox,
@@ -221,7 +224,7 @@ import {
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { CreateRequest } from '@/api/form/form'
+import { CreateRequest, UpdateRequest } from '@/api/form/form'
 import { WarningFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
@@ -237,10 +240,8 @@ const close = () => emit('update:visible', false)
 
 const { t } = useI18n()
 
-const ruleFormRef = ref(null)
-const formSize = ref('default')
-
-const personalForm = reactive({
+console.log(drawerProps.value.row);
+const personalForm = ref({
   name: '',
   gender: '',
   birthday: '',
@@ -279,18 +280,38 @@ const personalForm = reactive({
   chineseMedicinePurpose: '',
   chineseMedicineMethod: ''
 })
+if (drawerProps.value.title !== 'create') {
+
+personalForm.value = drawerProps.value.row
+}
+
+const ruleFormRef = ref(null)
+const formSize = ref('default')
 
 const handleDateChange = (value) => {
   if (value instanceof Date) {
     value = value.toISOString()
   }
   const dateOnly = value.split('T')[0]
-  personalForm.birthday = dateOnly
+  personalForm.value.birthday = dateOnly
 }
 
 const submitForm = async () => {
   console.log('Form Data:', personalForm)
-  CreateRequest(personalForm)
+  CreateRequest(personalForm.value)
+    .then(() => {
+      const message = `${t(`form.action.${drawerProps.value.title}`, {
+        target: drawerProps.value.row.username
+      })} ${t('common.success')}`
+      ElMessage.success({ message })
+      drawerProps.value.getTableList()
+      close()
+    })
+    .catch((e) => e)
+}
+const editForm = async () => {
+  console.log('Form Data:', personalForm)
+  UpdateRequest(personalForm.value)
     .then(() => {
       const message = `${t(`form.action.${drawerProps.value.title}`, {
         target: drawerProps.value.row.username

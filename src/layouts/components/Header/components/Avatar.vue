@@ -37,26 +37,25 @@ const router = useRouter()
 
 // 退出登录
 const logout = () => {
-  ElMessageBox.confirm('您是否确认退出登录?', '温馨提示', {
-    confirmButtonText: '确定',
+  ElMessageBox.confirm('您是否確認退出登入?', '溫馨提示', {
+    confirmButtonText: '確定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    // 1.执行退出登录接口
+    // 1.執行登出登入介面
     LogoutRequest()
       .then(async () => {
         // 2.清除 Token
         const userStore = useUserStore()
         userStore.reset()
 
-        // 3.重定向到登陆页
+        // 3.重定向到登陸頁
         await router.replace(LOGIN_URL)
-        ElMessage.success('退出登录成功！')
+        ElMessage.success('退出登入成功！')
       })
       .catch(() => {})
   })
 }
-
 // 打开修改密码和个人信息弹窗
 const infoRef = ref(null)
 const passwordRef = ref(null)
