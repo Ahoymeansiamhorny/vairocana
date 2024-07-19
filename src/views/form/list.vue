@@ -1,5 +1,5 @@
 <template>
-  <div class="table-box" v-auth="['managerList', 'managerDirectList']">
+  <div class="table-box" v-auth="['formList']">
     <ProTable
       ref="proTable"
       :columns="columns"
@@ -13,7 +13,7 @@
       <!-- 表格 header 按钮 -->
       <template #tableHeader>
         <el-button
-          v-auth="['managerCreate']"
+          v-auth="['formCreate']"
           type="primary"
           :icon="CirclePlus"
           @click="openDrawer('create')"
@@ -139,7 +139,7 @@ const columns = reactive([
   // { type: 'expand', label: '' },
   { prop: 'id', label: '#', width: 50 },
   {
-    prop: 'username',
+    prop: 'name',
     label: t('form.fields.username'),
     search: { el: 'input' },
     render: (scope) => <span v-copy={scope.row.name}>{scope.row.name}</span>
