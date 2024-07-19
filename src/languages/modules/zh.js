@@ -311,9 +311,9 @@ export default {
       MASTER_DEFAULT_AGENT_KEYS: '主默認代理密鑰',
       LOCK_NUMBER_DURING_TRANSACTION: '交易期間鎖定號碼',
       LOCK_NUMBER_PERIOD_DAYS: '鎖定號碼天數',
-      COMPANY_WHATSAPP_L1: "公司WhatsApp第一行",
-      COMPANY_WHATSAPP_L2: "公司WhatsApp第二行",
-      COMPANY_WHATSAPP_L3: "公司WhatsApp第三行",
+      COMPANY_WHATSAPP_L1: '公司WhatsApp第一行',
+      COMPANY_WHATSAPP_L2: '公司WhatsApp第二行',
+      COMPANY_WHATSAPP_L3: '公司WhatsApp第三行',
       MIN_NUMBER_PRICE: '最低號碼價格',
       EXISTING_OPEN_PURCHASE_ORDER: '現有同時開放的購買訂單',
       MAX_THIRD_PARTY_TRANSFER_LIMIT: '第三方轉賬金額限制',
@@ -480,7 +480,7 @@ export default {
     37: '大華銀行'
   },
   menu: {
-    form:'禪林安心法會',
+    form: '禪林安心法會',
     page403: '403',
     page404: '404',
     page500: '500',
@@ -511,6 +511,10 @@ export default {
     ownerCostSummaryList: '所有者成本總結'
   },
   permission: {
+    formList: '表單列表',
+    formUpdate: '更新表單',
+    formDelete: '刪除表單',
+    formCreate: '新增表單',
     agentCreate: '創建代理',
     agentDelete: '刪除代理',
     agentList: '代理列表',
