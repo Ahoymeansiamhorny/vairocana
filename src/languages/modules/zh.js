@@ -194,11 +194,11 @@ export default {
       endTime: '結束時間'
     },
     action: {
-      search: '搜索',
+      search: '搜尋',
       reset: '重置',
       edit: '編輯 {target}',
-      create: '創建 {target}',
-      view: '查看 {target}',
+      create: '新增 {target}',
+      view: '檢視 {target}',
       resetPassword: '重置密碼',
       delete: '刪除',
       upload: '上傳',
@@ -263,7 +263,7 @@ export default {
       city: '城市',
       ip: 'IP',
       date: '日期',
-      username: '用戶名',
+      username: '姓名',
       password: '密碼',
       newPassword: '新密碼',
       confirmPassword: '確認新密碼',

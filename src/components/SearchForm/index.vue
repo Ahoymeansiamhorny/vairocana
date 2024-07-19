@@ -31,7 +31,7 @@
             <el-button type="primary" :icon="Search" @click="search">
               {{ t('form.action.search') }}
             </el-button>
-            <el-button :icon="Delete" @click="reset">
+            <el-button :icon="Refresh" @click="reset">
               {{ t('form.action.reset') }}
             </el-button>
             <el-button
@@ -54,7 +54,7 @@
 </template>
 <script setup name="SearchForm">
 import { computed, ref } from 'vue'
-import { Delete, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
+import { Refresh, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
 import Grid from '@/components/Grid/index.vue'
 import GridItem from '@/components/Grid/components/GridItem.vue'
