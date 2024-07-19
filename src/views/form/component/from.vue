@@ -191,7 +191,8 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { ElForm, ElCheckbox, ElInput, ElDatePicker, ElCheckboxGroup, ElButton, ElRadioGroup, ElRadioButton } from 'element-plus'
-import { CreateRequest } from '@/api/from/from'
+import { CreateRequest } from '@/api/form/form'
+
 const ruleFormRef = ref(null)
 const formSize = ref('default')
 
