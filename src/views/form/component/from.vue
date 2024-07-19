@@ -1,4 +1,12 @@
 <template>
+
+  <el-dialog
+    v-model="visible"
+    :destroy-on-close="true"
+    :before-close="handleClose"
+    width="65%"
+    :title="t(`form.action.${drawerProps.title}`, { target: drawerProps.row.name })"
+  >
   <el-form ref="ruleFormRef" style="padding: 0 15px; max-width: 600px; margin: 0 auto" :model="personalForm"
     label-width="auto" class="demo-ruleForm" :size="formSize" status-icon
 >
@@ -186,12 +194,34 @@
       <!-- <el-button @click="resetForm">清除</el-button> -->
     </el-form-item>
   </el-form>
+  </el-dialog>
+
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
-import { ElForm, ElCheckbox, ElInput, ElDatePicker, ElCheckboxGroup, ElButton, ElRadioGroup, ElRadioButton } from 'element-plus'
+import { markRaw, reactive, ref } from 'vue'
+import {
+  ElForm,
+  ElCheckbox,
+  ElInput,
+  ElDatePicker,
+  ElCheckboxGroup,
+  ElButton,
+  ElRadioGroup,
+  ElRadioButton,
+  ElMessageBox
+} from 'element-plus'
 import { CreateRequest } from '@/api/form/form'
+import { WarningFilled } from '@element-plus/icons-vue'
+import { useI18n } from 'vue-i18n'
+
+const props = defineProps(['visible', 'params'])
+
+const drawerProps = ref(props.params)
+
+const visible = ref(props.visible)
+
+const { t } = useI18n()
 
 const ruleFormRef = ref(null)
 const formSize = ref('default')
@@ -244,16 +274,32 @@ const handleDateChange = (value) => {
   personalForm.birthday = dateOnly
 }
 
-const submitForm = async() => {
+const submitForm = async () => {
   console.log('Form Data:', personalForm)
   try {
-    const response = await CreateRequest(personalForm);
-    console.log('Response:', response.data);
+    const response = await CreateRequest(personalForm)
+    console.log('Response:', response.data)
     // 在這裡處理成功的響應
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error)
     // 在這裡處理錯誤
   }
+}
+
+const handleClose = () => {
+  if (drawerProps.value.title === 'view') {
+    return close()
+  }
+  ElMessageBox.confirm(t('common.dialogDrawerClose'), '', {
+    confirmButtonText: 'OK',
+    type: 'warning',
+    icon: markRaw(WarningFilled),
+    center: true
+  })
+    .then(() => {
+      close()
+    })
+    .catch(() => {})
 }
 </script>
 
@@ -262,19 +308,15 @@ const submitForm = async() => {
   display: flex;
   align-items: center;
 }
-
 ::v-deep .center .el-form-item__content {
   margin: 0 auto;
 }
-
 ::v-deep .el-form-item__label-wrap {
   margin-left: 0 !important;
 }
-
 ::v-deep .el-form-item {
   flex-direction: column;
 }
-
 ::v-deep .el-date-editor.el-input {
   width: 100%;
 }
