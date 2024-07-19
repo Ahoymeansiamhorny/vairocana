@@ -1,0 +1,107 @@
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+stages:
+  - build-vue
+  - build-image
+  - deploy
+
+.deploy-dev:
+  only:
+    - develop
+  environment:
+    name: dev
+
+.deploy-prod:
+  only:
+    - main
+#   when: manual
+  environment:
+    name: prod
+
+.build-vue:
+  image: node:20.10.0-alpine
+  stage: build-vue
+  tags:
+    - docker
+  cache:
+    paths:
+      - node_modules
+  script:
+    - echo 'VITE_API_URL='VITE_API_URL >> .env.production
+    - yarn install && yarn run build
+  artifacts:
+    paths:
+      - dist/
+
+build-vue-qat:
+  extends:
+    - .deploy-dev
+    - .build-vue
+
+build-vue-prod:
+  extends:
+    - .deploy-prod
+    - .build-vue
+
+.build-image:
+  stage: build-image
+  image: docker
+  tags:
+    - docker
+  services:
+    - docker:dind
+  script:
+    - echo $GAR_KEY >> key
+    - cat key | docker login -u _json_key --password-stdin $GAR_HOST
+    - docker build --tag $REGISTRY:$CI_COMMIT_SHORT_SHA -f devops/Dockerfile ./
+    - docker push $REGISTRY:$CI_COMMIT_SHORT_SHA
+
+build-image-qat:
+  extends:
+    - .deploy-dev
+    - .build-image
+  dependencies:
+    - build-vue-qat
+
+build-image-prod:
+  extends:
+    - .deploy-prod
+    - .build-image
+  dependencies:
+    - build-vue-prod
+
+.deploy:
+  stage: deploy
+  script:
+    - sh /home/gcp/login.sh
+    - sed -i "s|<IMAGE>|$REGISTRY:$CI_COMMIT_SHORT_SHA|g" devops/deployment.yaml
+    - sed -i "s|<SERVICE>|$SERVICE_NAME|g" devops/deployment.yaml
+    - sed -i "s|<SERVICE>|$SERVICE_NAME|g" devops/ingress.yaml
+    - sed -i "s|<WEB_HOST>|$WEB_HOST|g" devops/ingress.yaml
+    - kubectl apply -f devops/deployment.yaml
+    - kubectl apply -f devops/ingress.yaml
+
+deploy-qat:
+  tags:
+    - shell
+  extends:
+    - .deploy-dev
+    - .deploy
+  dependencies:
+    - build-image-qat
+  variables:
+    SERVICE_NAME: vip-cms-dev
+
+deploy-prod:
+  tags:
+    - shell
+  extends:
+    - .deploy-prod
+    - .deploy
+  dependencies:
+    - build-image-prod
+  variables:
+      SERVICE_NAME: vip-cms-prod

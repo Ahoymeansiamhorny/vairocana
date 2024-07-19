@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: <SERVICE>-svc
+  labels:
+    apps: <SERVICE>
+spec:
+  ports:
+    - name: <SERVICE>
+      port: 80
+  type: ClusterIP
+  selector:
+    apps: <SERVICE>-pod
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <SERVICE>-pod
+spec:
+  selector:
+    matchLabels:
+      apps: <SERVICE>-pod
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        apps: <SERVICE>-pod
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: <SERVICE>
+          image: <IMAGE>
+          imagePullPolicy: Always
+          ports:
+            - name: <SERVICE>
+              containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+

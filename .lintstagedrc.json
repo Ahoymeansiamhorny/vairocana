@@ -1,0 +1,8 @@
+{
+  "*.{js,jsx,ts,tsx}": ["eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore", "prettier --write"],
+  "{!(package)*.json,*.code-snippets,.!(browserslist)*rc}": ["prettier --write--parser json"],
+  "package.json": ["prettier --write"],
+  "*.vue": ["eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore", "prettier --write", "stylelint '{**/*,*}.{vue}'"],
+  "*.{scss,less,styl,html}": ["stylelint '{**/*,*}.{scss}'", "prettier --write"],
+  "*.md": ["prettier --write"]
+}
