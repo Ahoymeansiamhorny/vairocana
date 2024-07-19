@@ -191,7 +191,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { ElForm, ElCheckbox, ElInput, ElDatePicker, ElCheckboxGroup, ElButton, ElRadioGroup, ElRadioButton } from 'element-plus'
-
+import { CreateRequest } from '@/api/from/from'
 const ruleFormRef = ref(null)
 const formSize = ref('default')
 
@@ -243,8 +243,16 @@ const handleDateChange = (value) => {
   personalForm.birthday = dateOnly
 }
 
-const submitForm = () => {
+const submitForm = async() => {
   console.log('Form Data:', personalForm)
+  try {
+    const response = await CreateRequest(personalForm.value);
+    console.log('Response:', response.data);
+    // 在這裡處理成功的響應
+  } catch (error) {
+    console.error('Error:', error);
+    // 在這裡處理錯誤
+  }
 }
 </script>
 
