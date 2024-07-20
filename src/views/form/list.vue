@@ -162,7 +162,7 @@ const openDrawer = (title = '', row) => {
     title === 'create' ? CreateRequest : title === 'edit' ? UpdateRequest : undefined
 }
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 
 ::v-deep .el-table__inner-wrapper tr td:first-child {
   .cell {
