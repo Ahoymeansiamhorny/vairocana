@@ -29,7 +29,7 @@
       <el-form-item label="中級班上課地點">
         <el-input v-model="personalForm.intermediateClassLocation" />
       </el-form-item>
-      <el-form-item label="類別">
+      <el-form-item label="期別">
         <el-input v-model="personalForm.category" />
       </el-form-item>
       <el-form-item label="籍貫">
@@ -130,7 +130,7 @@ const personalForm = ref({
   expertise: "",  // 專長
   occupation: "",  // 職業
   intermediateClassLocation: "",  // 中級班上課地點
-  category: "",  // 分類
+  category: "",  // 期別
   origin: "",  // 籍貫
   firstClassLocation: "",  // 初級班首次上課地點
   mobile: "",  // 手機號碼
@@ -141,9 +141,9 @@ const personalForm = ref({
   emergencyContactFamilyPhone: "",  // 家人緊急聯絡人電話
   emergencyContactReferrer: "",  // 禪友緊急聯絡人（介紹人）
   referrerIntermediateClassSession: "",  // 禪友（介紹人）中級班期別
-  emergencyContactReferrerPhone: "",  // 禪友緊急聯絡人電話
+  emergencyContactFriendMobile: "",  // 禪友緊急聯絡人電話
   meditationExperience: "",  // 修行心得
-  entryAllowed: "",  // "true" 表示可以入，"false" 表示不可以入
+  entryAllowed: 0,  // "true" 表示可以入，"false" 表示不可以入
   entryNotAllowedReason: "",  // 不可以入的原因
 });
 

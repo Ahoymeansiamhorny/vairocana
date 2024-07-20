@@ -244,44 +244,45 @@ const dialogWidth = computed(() => {
 })
 console.log(drawerProps.value.row);
 const personalForm = ref({
-  name: '',
-  gender: '',
-  birthday: '',
-  education: '',
-  major: '',
-  occupation: '',
-  mobilePhone: '',
-  homePhone: '',
-  seminarName: '',
-  seminarSession: '',
-  emergencyContactFamily: '',
-  emergencyContactFamilyMobile: '',
-  emergencyContactFamilyPhone: '',
-  emergencyContactFriend: '',
-  emergencyContactFriendPhone: '',
-  emergencyContactFriendMobile: '',
-  attendedZenRetreat: 1,
-  zenRetreatLocation: '',
-  attendedBuddhistRetreat: 1,
-  buddhistEventLocation: '',
-  classRecords: [],
-  currentBloodPressure: '',
-  currentConditions: [],
-  currentIllnesses: [],
-  preferredFood: [],
-  vitamin: '',
-  vitaminFrequency: '',
-  healthSupplements: '',
-  healthSupplementFrequency: '',
-  otherSupplementsDetail: '',
-  takingMedication: 1,
-  westernMedicineName: '',
-  westernMedicinePurpose: '',
-  westernMedicineMethod: '',
-  chineseMedicineName: '',
-  chineseMedicinePurpose: '',
-  chineseMedicineMethod: ''
+  name: '',  // 姓名
+  gender: '',  // 性別
+  birthday: '',  // 生日
+  education: '',  // 教育背景
+  major: '',  // 專業
+  occupation: '',  // 職業
+  mobilePhone: '',  // 手機號碼
+  homePhone: '',  // 家庭電話
+  seminarName: '',  // 研討會名稱
+  seminarSession: '',  // 研討會期別
+  emergencyContactFamily: '',  // 家庭緊急聯絡人
+  emergencyContactFamilyMobile: '',  // 家庭緊急聯絡人手機
+  emergencyContactFamilyPhone: '',  // 家庭緊急聯絡人電話
+  emergencyContactFriend: '',  // 禪友緊急聯絡人
+  emergencyContactFriendPhone: '',  // 禪友緊急聯絡人室內電話
+  emergencyContactFriendMobile: '',  // 禪友緊急聯絡人手機
+  attendedZenRetreat: 1,  // 是否參加過禪修靜修
+  zenRetreatLocation: '',  // 禪修靜修地點
+  attendedBuddhistRetreat: 1,  // 是否參加過佛教靜修
+  buddhistEventLocation: '',  // 佛教靜修地點
+  classRecords: [],  // 上課紀錄
+  currentBloodPressure: '',  // 目前血壓
+  currentConditions: [],  // 目前健康狀況
+  currentIllnesses: [],  // 目前疾病
+  preferredFood: [],  // 喜歡的食物
+  vitamin: '',  // 維他命
+  vitaminFrequency: '',  // 維他命服用頻率
+  healthSupplements: '',  // 健康補充品
+  healthSupplementFrequency: '',  // 健康補充品服用頻率
+  otherSupplementsDetail: '',  // 其他補充品詳情
+  takingMedication: 1,  // 是否正在服藥
+  westernMedicineName: '',  // 西藥名稱
+  westernMedicinePurpose: '',  // 西藥用途
+  westernMedicineMethod: '',  // 西藥使用方法
+  chineseMedicineName: '',  // 中藥名稱
+  chineseMedicinePurpose: '',  // 中藥用途
+  chineseMedicineMethod: ''  // 中藥使用方法
 })
+
 if (drawerProps.value.title !== 'create') {
 
 personalForm.value = drawerProps.value.row
