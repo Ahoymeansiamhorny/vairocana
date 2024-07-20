@@ -480,7 +480,7 @@ export default {
     37: '大華銀行'
   },
   menu: {
-    form: '禪林安心法會',
+    form: '初級班',
     page403: '403',
     page404: '404',
     page500: '500',

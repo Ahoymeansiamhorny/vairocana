@@ -6,7 +6,7 @@ import { getBrowserLang } from '@/utils'
 import { useTheme } from '@/hooks/useTheme'
 import { ElConfigProvider } from 'element-plus'
 import en from 'element-plus/es/locale/lang/en'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import zhTw from 'element-plus/es/locale/lang/zh-tw'
 import { useGlobalStore } from '@/stores/modules/global'
 
 const globalStore = useGlobalStore()
@@ -23,9 +23,9 @@ onMounted(() => {
 
 // element language
 const locale = computed(() => {
-  if (globalStore.language === 'zh') return zhCn
+  if (globalStore.language === 'zh') return zhTw
   if (globalStore.language === 'en') return en
-  return getBrowserLang() === 'zh' ? zhCn : en
+  return getBrowserLang() === 'zh' ? zhTw : en
 })
 // element assemblySize
 const assemblySize = computed(() => globalStore.assemblySize)

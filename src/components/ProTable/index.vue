@@ -53,6 +53,7 @@
       :row-key="rowKey"
       @sort-change="_sortLogic"
       @selection-change="selectionChange"
+      style="text-align: left;"
     >
       <!-- 默认插槽 -->
       <slot />
@@ -328,3 +329,12 @@ defineExpose({
   selectedListIds
 })
 </script>
+
+<style scoped lang="scss">
+::v-deep .el-table .cell{
+  text-align: left;
+  .el-button+.el-button {
+    margin: 0;
+  }
+}
+</style>
