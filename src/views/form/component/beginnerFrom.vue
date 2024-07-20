@@ -10,13 +10,14 @@
       ref="ruleFormRef"
       style="max-width: 600px; padding: 0 15px; margin: 0 auto"
       :model="personalForm"
+      :rules="rules"
       label-width="auto"
       class="demo-ruleForm"
       :size="formSize"
       status-icon
       :disabled="drawerProps.title === 'view'"
     >
-      <el-form-item label="姓名">
+      <el-form-item label="姓名" prop="name" ref="nameRef">
         <el-input v-model="personalForm.name" />
       </el-form-item>
       <el-form-item label="性別">
@@ -43,10 +44,10 @@
         <el-input v-model="personalForm.occupation" />
       </el-form-item>
       <el-form-item label="手機">
-        <el-input v-model="personalForm.mobilePhone" />
+        <el-input v-model="personalForm.mobilePhone" @input="personalForm.mobilePhone=personalForm.mobilePhone.replace(/[^0-9]/g,'')" />
       </el-form-item>
       <el-form-item label="室內電話">
-        <el-input v-model="personalForm.homePhone" />
+        <el-input v-model="personalForm.homePhone" @input="personalForm.homePhone=personalForm.homePhone.replace(/[^0-9]/g,'')" />
       </el-form-item>
       <el-form-item label="初級班講堂名稱">
         <el-input v-model="personalForm.seminarName" />
@@ -58,19 +59,19 @@
         <el-input v-model="personalForm.emergencyContactFamily" />
       </el-form-item>
       <el-form-item label="家人緊急聯絡人手機">
-        <el-input v-model="personalForm.emergencyContactFamilyMobile" />
+        <el-input v-model="personalForm.emergencyContactFamilyMobile" @input="personalForm.emergencyContactFamilyMobile=personalForm.emergencyContactFamilyMobile.replace(/[^0-9]/g,'')" />
       </el-form-item>
       <el-form-item label="家人緊急聯絡人市內電話（公司或住宅）">
-        <el-input v-model="personalForm.emergencyContactFamilyPhone" />
+        <el-input v-model="personalForm.emergencyContactFamilyPhone" @input="personalForm.emergencyContactFamilyPhone=personalForm.emergencyContactFamilyPhone.replace(/[^0-9]/g,'')"  />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人（介紹人）">
         <el-input v-model="personalForm.emergencyContactFriend" />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人室內電話（住家或公司）">
-        <el-input v-model="personalForm.emergencyContactFriendPhone" />
+        <el-input v-model="personalForm.emergencyContactFriendPhone" @input="personalForm.emergencyContactFriendPhone=personalForm.emergencyContactFriendPhone.replace(/[^0-9]/g,'')" />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人手機">
-        <el-input v-model="personalForm.emergencyContactFriendMobile" />
+        <el-input v-model="personalForm.emergencyContactFriendMobile" @input="personalForm.emergencyContactFriendMobile=personalForm.emergencyContactFriendMobile.replace(/[^0-9]/g,'')" />
       </el-form-item>
       <el-form-item label="是否曾參加禪七修行活動">
         <el-radio-group v-model.number="personalForm.attendedZenRetreat">
@@ -203,8 +204,6 @@
       <el-form-item class="center">
         <el-button v-if="drawerProps.title === 'create' " type="primary" style="margin: 0 auto" @click="submitForm"> 建立 </el-button>
         <el-button v-else type="primary" style="margin: 0 auto" @click="editForm"> 編輯 </el-button>
-
-        <!-- <el-button @click="resetForm">清除</el-button> -->
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -252,8 +251,8 @@ const personalForm = ref({
   occupation: '',  // 職業
   mobilePhone: '',  // 手機號碼
   homePhone: '',  // 家庭電話
-  seminarName: '',  // 研討會名稱
-  seminarSession: '',  // 研討會期別
+  seminarName: '',  // 初級班講堂名稱
+  seminarSession: '',  // 初級班講堂期數
   emergencyContactFamily: '',  // 家庭緊急聯絡人
   emergencyContactFamilyMobile: '',  // 家庭緊急聯絡人手機
   emergencyContactFamilyPhone: '',  // 家庭緊急聯絡人電話
@@ -289,6 +288,7 @@ personalForm.value = drawerProps.value.row
 }
 
 const ruleFormRef = ref(null)
+const nameRef = ref(null)
 const formSize = ref('default')
 
 const handleDateChange = (value) => {
@@ -299,19 +299,39 @@ const handleDateChange = (value) => {
   personalForm.value.birthday = dateOnly
 }
 
+const rules = ref({
+  name: [{ required: true, message: '請輸入姓名', trigger: 'blur' }]
+})
+
 const submitForm = async () => {
-  console.log('Form Data:', personalForm)
-  CreateRequest(personalForm.value)
-    .then(() => {
-      const message = `${t(`form.action.${drawerProps.value.title}`, {
-        target: drawerProps.value.row.username
-      })} ${t('common.success')}`
-      ElMessage.success({ message })
-      drawerProps.value.getTableList()
-      close()
-    })
-    .catch((e) => e)
+  ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      // 如果表单数据有效，则执行提交操作
+      console.log('Form Data:', personalForm.value)
+      CreateRequest(personalForm.value)
+        .then(() => {
+          const message = `${t(`form.action.${drawerProps.value.title}`, {
+            target: drawerProps.value.row.username
+          })} ${t('common.success')}`
+          ElMessage.success({ message })
+          drawerProps.value.getTableList()
+          close()
+        })
+        .catch((e) => e)
+    } else {
+      // 如果数据无效，可能需要显示一个错误消息或日志
+      scrollToErrorField(fields)
+    }
+  })
 }
+
+const scrollToErrorField = (fields) => {
+  if (fields.name) {
+    const element = nameRef.value.$el
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
 const editForm = async () => {
   console.log('Form Data:', personalForm)
   UpdateRequest(personalForm.value)
