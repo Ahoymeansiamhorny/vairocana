@@ -48,9 +48,9 @@
         <el-input v-model="personalForm.residenceAddress" />
       </el-form-item>
       <el-form-item label="是否可入">
-    <el-radio-group v-model="personalForm.entryAllowed">
-      <el-radio :label="true">可以</el-radio>
-      <el-radio :label="false">不可以</el-radio>
+    <el-radio-group v-model.number="personalForm.entryAllowed">
+      <el-radio-button label="2">是</el-radio-button>
+      <el-radio-button label="1">否</el-radio-button>
     </el-radio-group>
   </el-form-item>
 
