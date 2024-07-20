@@ -145,7 +145,7 @@ const submitForm = async () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 如果表单数据有效，则执行提交操作
-      console.log('Form Data:', personalForm.value);
+      console.log('Form Data:',  personalForm.value);
       IntermediateCreateRequest(personalForm.value)
         .then(() => {
           const message = `${t(`form.action.${drawerProps.value.title}`, { target: drawerProps.value.row.username })} ${t('common.success')}`;
