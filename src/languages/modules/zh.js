@@ -480,6 +480,7 @@ export default {
     37: '大華銀行'
   },
   menu: {
+    form: '表單管理',
     beginnerForm: '初級班',
     intermediateForm: '中級班',
     page403: '403',
