@@ -103,9 +103,9 @@ import {
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { CreateRequest, UpdateRequest } from '@/api/form/form'
 import { WarningFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { IntermediateCreateRequest, IntermediateUpdateRequest } from '@/api/form/form'
 
 const props = defineProps(['visible', 'params'])
 
@@ -165,7 +165,7 @@ const handleDateChange = (value) => {
 
 const submitForm = async () => {
   console.log('Form Data:', personalForm)
-  CreateRequest(personalForm.value)
+  IntermediateCreateRequest(personalForm.value)
     .then(() => {
       const message = `${t(`form.action.${drawerProps.value.title}`, {
         target: drawerProps.value.row.username
@@ -178,7 +178,7 @@ const submitForm = async () => {
 }
 const editForm = async () => {
   console.log('Form Data:', personalForm)
-  UpdateRequest(personalForm.value)
+  IntermediateUpdateRequest(personalForm.value)
     .then(() => {
       const message = `${t(`form.action.${drawerProps.value.title}`, {
         target: drawerProps.value.row.username

@@ -63,19 +63,15 @@ import { useI18n } from 'vue-i18n'
 import ProTable from '@/components/ProTable/index.vue'
 import { toDate } from '@/utils/day'
 import Drawer from '@/views/form/component/intermediateFrom.vue'
-import { useUserStore } from '@/stores/modules/user'
-import { adminIdentify } from '@/utils/dict'
-import { CreateRequest, DeleteRequest, UpdateRequest, ListRequest } from '@/api/form/form'
-import { PermissionRequest } from '@/api/selection/selection'
+import { IntermediateCreateRequest, IntermediateDeleteRequest, IntermediateUpdateRequest, IntermediateListRequest } from '@/api/form/form'
 
-const userStore = useUserStore()
 // ProTable 实例
 const proTable = ref()
 
 const { t } = useI18n()
 
 const getTableList = (params) => {
-  return ListRequest(params)
+  return IntermediateListRequest(params)
 }
 
 // 如果表格需要初始化请求参数，直接定义传给 ProTable (之后每次请求都会自动带上该参数，此参数更改之后也会一直带上，改变此参数会自动刷新表格数据)
@@ -125,7 +121,7 @@ function deleteAccount({ id, name }) {
     center: true
   })
     .then(() => {
-      DeleteRequest({ id })
+      IntermediateDeleteRequest({ id })
         .then(() => {
           const message = `${t(`form.action.delete`, {
             target: name
@@ -159,7 +155,7 @@ const openDrawer = (title = '', row) => {
   params.value.getTableList = proTable.value?.getTableList
   params.value.enumMap = proTable.value?.enumMap
   params.value.api =
-    title === 'create' ? CreateRequest : title === 'edit' ? UpdateRequest : undefined
+    title === 'create' ? IntermediateCreateRequest : title === 'edit' ? IntermediateUpdateRequest : undefined
 }
 </script>
 <style lang="scss">

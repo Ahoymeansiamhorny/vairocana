@@ -63,12 +63,8 @@ import { useI18n } from 'vue-i18n'
 import ProTable from '@/components/ProTable/index.vue'
 import { toDate } from '@/utils/day'
 import Drawer from '@/views/form/component/beginnerFrom.vue'
-import { useUserStore } from '@/stores/modules/user'
-import { adminIdentify } from '@/utils/dict'
 import { CreateRequest, DeleteRequest, UpdateRequest, ListRequest } from '@/api/form/form'
-import { PermissionRequest } from '@/api/selection/selection'
 
-const userStore = useUserStore()
 // ProTable 实例
 const proTable = ref()
 
