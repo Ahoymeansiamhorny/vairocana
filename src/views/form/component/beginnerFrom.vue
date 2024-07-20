@@ -18,7 +18,7 @@
       :disabled="drawerProps.title === 'view'"
     >
       <el-form-item label="姓名" prop="name" ref="nameRef">
-        <el-input v-model="personalForm.name" />
+        <el-input v-model="personalForm.name" :disabled="drawerProps.title === 'edit'" />
       </el-form-item>
       <el-form-item label="性別">
         <el-radio-group v-model="personalForm.gender">

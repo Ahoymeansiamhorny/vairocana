@@ -6,7 +6,7 @@
       :size="formSize" status-icon :disabled="drawerProps.title === 'view'"
 >
       <el-form-item label="姓名" prop="name" ref="nameRef">
-        <el-input v-model="personalForm.name" />
+        <el-input v-model="personalForm.name" :disabled="drawerProps.title === 'edit'" />
       </el-form-item>
       <el-form-item label="性別">
         <el-radio-group v-model="personalForm.gender">
@@ -127,6 +127,10 @@ const personalForm = ref({
 const rules = ref({
   name: [{ required: true, message: '請輸入姓名', trigger: 'blur' }]
 })
+if (drawerProps.value.title !== 'create') {
+
+personalForm.value = drawerProps.value.row
+}
 const ruleFormRef = ref(null)
 const nameRef = ref(null)
 

@@ -147,8 +147,10 @@ const personalForm = ref({
   entryNotAllowedReason: "",  // 不可以入的原因
 });
 
-if (drawerProps.value.title !== 'create') {
+console.log(drawerProps.value);
 
+if (drawerProps.value.title !== 'create') {
+  console.log('edit');
   personalForm.value = drawerProps.value.row
 }
 
