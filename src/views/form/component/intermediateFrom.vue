@@ -99,6 +99,7 @@ const emit = defineEmits(['update:visible'])
 const close = () => emit('update:visible', false)
 const { t } = useI18n()
 const dialogWidth = computed(() => window.innerWidth < 576 ? '95%' : '65%')
+const formSize = ref('default')
 const personalForm = ref({
   name: "",  // 姓名
   gender: "",  // 性別
