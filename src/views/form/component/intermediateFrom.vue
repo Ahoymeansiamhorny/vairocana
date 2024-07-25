@@ -8,6 +8,9 @@
       <el-form-item label="姓名" prop="name" ref="nameRef">
         <el-input v-model="personalForm.name" :disabled="drawerProps.title === 'edit'" />
       </el-form-item>
+      <el-form-item label="學號" prop="studentID" ref="studentIDRef">
+        <el-input v-model="personalForm.studentID"  @input="personalForm.studentID=personalForm.studentID.replace(/[^0-9]/g,'')"  :disabled="drawerProps.title === 'edit'" />
+      </el-form-item>
       <el-form-item label="性別">
         <el-radio-group v-model="personalForm.gender">
           <el-radio-button label="male">男</el-radio-button>
@@ -123,6 +126,7 @@ const dialogWidth = computed(() => window.innerWidth < 576 ? '95%' : '65%')
 const formSize = ref('default')
 const personalForm = ref({
   name: "",  // 姓名
+  studentID: "", //學號
   gender: "",  // 性別
   birthday: "",  // 生日（格式：YYYY-MM-DD）
   education: "",  // 學歷
@@ -155,7 +159,8 @@ watch(fileList, (newValue) => {
   console.log('File list changed, new length:', newValue.length);
 });
 const rules = ref({
-  name: [{ required: true, message: '請輸入姓名', trigger: 'blur' }]
+  name: [{ required: true, message: '請輸入姓名', trigger: 'blur' }],
+  studentID: [{ required: true, message: '請輸入學號', trigger: 'blur' }]
 })
 if (drawerProps.value.title !== 'create') {
   personalForm.value = drawerProps.value.row
@@ -167,6 +172,8 @@ if (drawerProps.value.title !== 'create') {
 }
 const ruleFormRef = ref(null)
 const nameRef = ref(null)
+const studentIDRef = ref(null)
+
 const upload = (file) => {
   console.log(file)
   const formData = new FormData()
@@ -236,6 +243,10 @@ const handleClose = () => {
 const scrollToErrorField = (fields) => {
   if (fields.name) {
     const element = nameRef.value.$el;
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  if (fields.studentID) {  // 使用 'studentID' 代替 'studentIDRef'
+    const element = studentIDRef.value.$el;
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
