@@ -481,8 +481,8 @@ export default {
   },
   menu: {
     form: '表單管理',
-    beginnerForm: '初級班',
-    intermediateForm: '中級班',
+    beginnerForm: '初級班會員新增',
+    intermediateForm: '中級班會員新增',
     page403: '403',
     page404: '404',
     page500: '500',

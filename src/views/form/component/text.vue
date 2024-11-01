@@ -37,7 +37,7 @@
       <el-form-item label="上傳圖片">
         <el-upload
           class="upload-demo"
-          action="#" 
+          action="#"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
           :before-upload="beforeUpload"
@@ -46,13 +46,13 @@
           :auto-upload="false"
           :on-change="handleChange"
           :limit="1"
-      >
+        >
           <div v-if="!isUploadDisabled">請選擇一張圖片上傳</div>
           <div v-else>已選擇圖片</div>
         </el-upload>
-  <el-dialog v-model:visible="previewVisible">
-    <img width="100%" :src="previewImage" alt="預覽圖片" />
-  </el-dialog>
+        <el-dialog v-model:visible="previewVisible">
+          <img width="100%" :src="previewImage" alt="預覽圖片" />
+        </el-dialog>
       </el-form-item>
       <el-form-item label="學歷">
         <el-input v-model="personalForm.education" />
@@ -64,12 +64,18 @@
         <el-input v-model="personalForm.occupation" />
       </el-form-item>
       <el-form-item label="手機">
-        <el-input v-model="personalForm.mobilePhone" @input="personalForm.mobilePhone=personalForm.mobilePhone.replace(/[^0-9]/g,'')" />
+        <el-input
+          v-model="personalForm.mobilePhone"
+          @input="personalForm.mobilePhone = personalForm.mobilePhone.replace(/[^0-9]/g, '')"
+        />
       </el-form-item>
       <el-form-item label="室內電話">
-        <el-input v-model="personalForm.homePhone" @input="personalForm.homePhone=personalForm.homePhone.replace(/[^0-9]/g,'')" />
+        <el-input
+          v-model="personalForm.homePhone"
+          @input="personalForm.homePhone = personalForm.homePhone.replace(/[^0-9]/g, '')"
+        />
       </el-form-item>
-      <el-form-item label="初級班講堂名稱">
+      <el-form-item label="講堂名稱">
         <el-input v-model="personalForm.seminarName" />
       </el-form-item>
       <el-form-item label="初級班講堂期數">
@@ -79,19 +85,43 @@
         <el-input v-model="personalForm.emergencyContactFamily" />
       </el-form-item>
       <el-form-item label="家人緊急聯絡人手機">
-        <el-input v-model="personalForm.emergencyContactFamilyMobile" @input="personalForm.emergencyContactFamilyMobile=personalForm.emergencyContactFamilyMobile.replace(/[^0-9]/g,'')" />
+        <el-input
+          v-model="personalForm.emergencyContactFamilyMobile"
+          @input="
+            personalForm.emergencyContactFamilyMobile =
+              personalForm.emergencyContactFamilyMobile.replace(/[^0-9]/g, '')
+          "
+        />
       </el-form-item>
       <el-form-item label="家人緊急聯絡人市內電話（公司或住宅）">
-        <el-input v-model="personalForm.emergencyContactFamilyPhone" @input="personalForm.emergencyContactFamilyPhone=personalForm.emergencyContactFamilyPhone.replace(/[^0-9]/g,'')"  />
+        <el-input
+          v-model="personalForm.emergencyContactFamilyPhone"
+          @input="
+            personalForm.emergencyContactFamilyPhone =
+              personalForm.emergencyContactFamilyPhone.replace(/[^0-9]/g, '')
+          "
+        />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人（介紹人）">
         <el-input v-model="personalForm.emergencyContactFriend" />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人室內電話（住家或公司）">
-        <el-input v-model="personalForm.emergencyContactFriendPhone" @input="personalForm.emergencyContactFriendPhone=personalForm.emergencyContactFriendPhone.replace(/[^0-9]/g,'')" />
+        <el-input
+          v-model="personalForm.emergencyContactFriendPhone"
+          @input="
+            personalForm.emergencyContactFriendPhone =
+              personalForm.emergencyContactFriendPhone.replace(/[^0-9]/g, '')
+          "
+        />
       </el-form-item>
       <el-form-item label="禪友緊急聯絡人手機">
-        <el-input v-model="personalForm.emergencyContactFriendMobile" @input="personalForm.emergencyContactFriendMobile=personalForm.emergencyContactFriendMobile.replace(/[^0-9]/g,'')" />
+        <el-input
+          v-model="personalForm.emergencyContactFriendMobile"
+          @input="
+            personalForm.emergencyContactFriendMobile =
+              personalForm.emergencyContactFriendMobile.replace(/[^0-9]/g, '')
+          "
+        />
       </el-form-item>
       <el-form-item label="是否曾參加禪七修行活動">
         <el-radio-group v-model.number="personalForm.attendedZenRetreat">
@@ -222,7 +252,14 @@
         <el-input v-model="personalForm.chineseMedicineMethod" type="textarea" />
       </el-form-item>
       <el-form-item class="center">
-        <el-button v-if="drawerProps.title === 'create' " type="primary" style="margin: 0 auto" @click="submitForm"> 建立 </el-button>
+        <el-button
+          v-if="drawerProps.title === 'create'"
+          type="primary"
+          style="margin: 0 auto"
+          @click="submitForm"
+        >
+          建立
+        </el-button>
         <el-button v-else type="primary" style="margin: 0 auto" @click="editForm"> 編輯 </el-button>
       </el-form-item>
     </el-form>
@@ -260,50 +297,49 @@ const { t } = useI18n()
 const dialogWidth = computed(() => {
   return window.innerWidth < 576 ? '95%' : '65%'
 })
-console.log(drawerProps.value.row);
+console.log(drawerProps.value.row)
 const personalForm = ref({
-  name: '',  // 姓名
-  gender: '',  // 性別
-  birthday: '',  // 生日
-  education: '',  // 教育背景
-  major: '',  // 專業
-  occupation: '',  // 職業
-  mobilePhone: '',  // 手機號碼
-  homePhone: '',  // 家庭電話
-  seminarName: '',  // 初級班講堂名稱
-  seminarSession: '',  // 初級班講堂期數
-  emergencyContactFamily: '',  // 家庭緊急聯絡人
-  emergencyContactFamilyMobile: '',  // 家庭緊急聯絡人手機
-  emergencyContactFamilyPhone: '',  // 家庭緊急聯絡人電話
-  emergencyContactFriend: '',  // 禪友緊急聯絡人
-  emergencyContactFriendPhone: '',  // 禪友緊急聯絡人室內電話
-  emergencyContactFriendMobile: '',  // 禪友緊急聯絡人手機
-  attendedZenRetreat: 1,  // 是否參加過禪修靜修
-  zenRetreatLocation: '',  // 禪修靜修地點
-  attendedBuddhistRetreat: 1,  // 是否參加過佛教靜修
-  buddhistEventLocation: '',  // 佛教靜修地點
-  classRecords: [],  // 上課紀錄
-  currentBloodPressure: '',  // 目前血壓
-  currentConditions: [],  // 目前健康狀況
-  currentIllnesses: [],  // 目前疾病
-  preferredFood: [],  // 喜歡的食物
-  vitamin: '',  // 維他命
-  vitaminFrequency: '',  // 維他命服用頻率
-  healthSupplements: '',  // 健康補充品
-  healthSupplementFrequency: '',  // 健康補充品服用頻率
-  otherSupplementsDetail: '',  // 其他補充品詳情
-  takingMedication: 1,  // 是否正在服藥
-  westernMedicineName: '',  // 西藥名稱
-  westernMedicinePurpose: '',  // 西藥用途
-  westernMedicineMethod: '',  // 西藥使用方法
-  chineseMedicineName: '',  // 中藥名稱
-  chineseMedicinePurpose: '',  // 中藥用途
-  chineseMedicineMethod: ''  // 中藥使用方法
+  name: '', // 姓名
+  gender: '', // 性別
+  birthday: '', // 生日
+  education: '', // 教育背景
+  major: '', // 專業
+  occupation: '', // 職業
+  mobilePhone: '', // 手機號碼
+  homePhone: '', // 家庭電話
+  seminarName: '', // 初級班講堂名稱
+  seminarSession: '', // 初級班講堂期數
+  emergencyContactFamily: '', // 家庭緊急聯絡人
+  emergencyContactFamilyMobile: '', // 家庭緊急聯絡人手機
+  emergencyContactFamilyPhone: '', // 家庭緊急聯絡人電話
+  emergencyContactFriend: '', // 禪友緊急聯絡人
+  emergencyContactFriendPhone: '', // 禪友緊急聯絡人室內電話
+  emergencyContactFriendMobile: '', // 禪友緊急聯絡人手機
+  attendedZenRetreat: 1, // 是否參加過禪修靜修
+  zenRetreatLocation: '', // 禪修靜修地點
+  attendedBuddhistRetreat: 1, // 是否參加過佛教靜修
+  buddhistEventLocation: '', // 佛教靜修地點
+  classRecords: [], // 上課紀錄
+  currentBloodPressure: '', // 目前血壓
+  currentConditions: [], // 目前健康狀況
+  currentIllnesses: [], // 目前疾病
+  preferredFood: [], // 喜歡的食物
+  vitamin: '', // 維他命
+  vitaminFrequency: '', // 維他命服用頻率
+  healthSupplements: '', // 健康補充品
+  healthSupplementFrequency: '', // 健康補充品服用頻率
+  otherSupplementsDetail: '', // 其他補充品詳情
+  takingMedication: 1, // 是否正在服藥
+  westernMedicineName: '', // 西藥名稱
+  westernMedicinePurpose: '', // 西藥用途
+  westernMedicineMethod: '', // 西藥使用方法
+  chineseMedicineName: '', // 中藥名稱
+  chineseMedicinePurpose: '', // 中藥用途
+  chineseMedicineMethod: '' // 中藥使用方法
 })
 
 if (drawerProps.value.title !== 'create') {
-
-personalForm.value = drawerProps.value.row
+  personalForm.value = drawerProps.value.row
 }
 
 const ruleFormRef = ref(null)
@@ -384,30 +420,30 @@ const handleClose = () => {
 const fileList = ref([])
 const previewVisible = ref(false)
 const previewImage = ref('')
-const isUploadDisabled = ref(false);  // 這是一個新的反應式參數，用來控制上傳按鈕是否禁用
+const isUploadDisabled = ref(false) // 這是一個新的反應式參數，用來控制上傳按鈕是否禁用
 
 watch(fileList, (newValue) => {
   // 這裡我們檢查 fileList 的長度
-  isUploadDisabled.value = newValue.length > 0;
-  console.log('File list changed, new length:', newValue.length);
-});
-const handlePreview = file => {
+  isUploadDisabled.value = newValue.length > 0
+  console.log('File list changed, new length:', newValue.length)
+})
+const handlePreview = (file) => {
   previewImage.value = file.url || file.thumbUrl
   previewVisible.value = true
 }
 
-const handleRemove = file => {
+const handleRemove = (file) => {
   console.log('remove file', file)
-  fileList.value = [];
+  fileList.value = []
 }
 const handleChange = (file, newFileList) => {
   // 更新 fileList 反应式变量
-  fileList.value = [...newFileList];
-  console.log("Selected file:", file);
-  console.log("Updated file list:", fileList.value);
-};
+  fileList.value = [...newFileList]
+  console.log('Selected file:', file)
+  console.log('Updated file list:', fileList.value)
+}
 
-const beforeUpload = file => {
+const beforeUpload = (file) => {
   const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJPG) {
     ElMessage.error('只能上傳 JPG/PNG 檔案')
@@ -420,7 +456,6 @@ const beforeUpload = file => {
   }
   return true
 }
-
 </script>
 
 <style scoped lang="scss">

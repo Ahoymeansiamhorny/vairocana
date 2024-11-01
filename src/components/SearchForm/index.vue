@@ -53,8 +53,10 @@
   </div>
 </template>
 <script setup name="SearchForm">
-import { computed, ref } from 'vue'
-import { Refresh, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
+import { ref } from 'vue'
+// import { computed, ref } from 'vue'
+import { Refresh, Search } from '@element-plus/icons-vue'
+// import { Refresh, Search, ArrowDown, ArrowUp } from '@element-plus/icons-vue'
 import SearchFormItem from './components/SearchFormItem.vue'
 import Grid from '@/components/Grid/index.vue'
 import GridItem from '@/components/Grid/components/GridItem.vue'
@@ -62,16 +64,16 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 // 默认值
-const props = defineProps({
-  columns: Array,
-  searchParam: Object,
-  searchCol: {
-    type: Object,
-    default: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 })
-  },
-  search: Function,
-  reset: Function
-})
+// const props = defineProps({
+//   columns: Array,
+//   searchParam: Object,
+//   searchCol: {
+//     type: Object,
+//     default: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 })
+//   },
+//   search: Function,
+//   reset: Function
+// })
 
 // 获取响应式设置
 const getResponsive = (item) => {
@@ -91,22 +93,22 @@ const collapsed = ref(true)
 
 // 获取响应式断点
 const gridRef = ref()
-const breakPoint = computed(() => gridRef.value?.breakPoint)
+// const breakPoint = computed(() => gridRef.value?.breakPoint)
 
 // 判断是否显示 展开/合并 按钮
-const showCollapse = computed(() => {
-  let show = false
-  props.columns.reduce((prev, current) => {
-    prev +=
-      (current.search?.[breakPoint.value]?.span ?? current.search?.span ?? 1) +
-      (current.search?.[breakPoint.value]?.offset ?? current.search?.offset ?? 0)
-    if (typeof props.searchCol !== 'number') {
-      if (prev >= props.searchCol[breakPoint.value]) show = true
-    } else {
-      if (prev >= props.searchCol) show = true
-    }
-    return prev
-  }, 0)
-  return show
-})
+// const showCollapse = computed(() => {
+//   let show = false
+//   props.columns.reduce((prev, current) => {
+//     prev +=
+//       (current.search?.[breakPoint.value]?.span ?? current.search?.span ?? 1) +
+//       (current.search?.[breakPoint.value]?.offset ?? current.search?.offset ?? 0)
+//     if (typeof props.searchCol !== 'number') {
+//       if (prev >= props.searchCol[breakPoint.value]) show = true
+//     } else {
+//       if (prev >= props.searchCol) show = true
+//     }
+//     return prev
+//   }, 0)
+//   return show
+// })
 </script>

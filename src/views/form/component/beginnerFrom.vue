@@ -37,7 +37,7 @@
       </el-form-item>
       <el-form-item label="相片">
         <el-upload
-          action="#" 
+          action="#"
           :http-request="upload"
           :on-preview="handlePreview"
           :on-remove="handleRemove"
@@ -47,12 +47,12 @@
           :on-change="handleChange"
           :on-exceed="handleExceed"
           :limit="1"
-      >
-      <div v-if="!isUploadDisabled">請選擇一張圖片上傳</div>
-      <div v-else>更換相片</div>
+        >
+          <div v-if="!isUploadDisabled">請選擇一張圖片上傳</div>
+          <div v-else>更換相片</div>
         </el-upload>
         <el-dialog v-model="previewVisible">
-          <img style="width: 100%;" :src="previewImage" alt="Preview Image" />
+          <img style="width: 100%" :src="previewImage" alt="Preview Image" />
         </el-dialog>
       </el-form-item>
       <el-form-item label="學歷">
@@ -78,6 +78,12 @@
       </el-form-item>
       <el-form-item label="初級班講堂名稱">
         <el-input v-model="personalForm.seminarName" />
+      </el-form-item>
+      <el-form-item label="新參/老參">
+        <el-radio-group v-model="personalForm.gender">
+          <el-radio-button label="male">新參</el-radio-button>
+          <el-radio-button label="female">老參</el-radio-button>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="初級班講堂期數">
         <el-input v-model="personalForm.seminarSession" />
@@ -344,20 +350,23 @@ const personalForm = ref({
 const fileList = ref([])
 const previewVisible = ref(false)
 const previewImage = ref('')
-const isUploadDisabled = ref(false);  // 這是一個新的反應式參數，用來控制上傳按鈕是否禁用
+const isUploadDisabled = ref(false) // 這是一個新的反應式參數，用來控制上傳按鈕是否禁用
 
 watch(fileList, (newValue) => {
   // 這裡我們檢查 fileList 的長度
-  isUploadDisabled.value = newValue.length > 0;
-  console.log('File list changed, new length:', newValue.length);
-});
+  isUploadDisabled.value = newValue.length > 0
+  console.log('File list changed, new length:', newValue.length)
+})
 if (drawerProps.value.title !== 'create') {
-  personalForm.value = drawerProps.value.row;
-  fileList.value = [...fileList.value, {
-    name: 'Uploaded Image.jpg',
-    url: personalForm.value.img,
-    status: 'finished'
-  }];
+  personalForm.value = drawerProps.value.row
+  fileList.value = [
+    ...fileList.value,
+    {
+      name: 'Uploaded Image.jpg',
+      url: personalForm.value.img,
+      status: 'finished'
+    }
+  ]
 }
 
 const ruleFormRef = ref(null)
@@ -372,7 +381,7 @@ const upload = (file) => {
     const { media } = res
     personalForm.value.img = media
   })
-  ElMessage.success('替換新相片成功');
+  ElMessage.success('替換新相片成功')
 }
 
 const handleDateChange = (value) => {
@@ -446,34 +455,33 @@ const handleClose = () => {
     .catch(() => {})
 }
 
-const handlePreview = file => {
+const handlePreview = (file) => {
   previewImage.value = file.url || file.thumbUrl
   previewVisible.value = true
 }
 
-const handleRemove = file => {
+const handleRemove = (file) => {
   console.log('remove file', file)
-  fileList.value = [];
+  fileList.value = []
 }
 const handleChange = (file, newFileList) => {
   // 更新 fileList 反应式变量
-  fileList.value = [...newFileList];
-  console.log("Selected file:", file);
-  console.log("Updated file list:", fileList.value);
-};
+  fileList.value = [...newFileList]
+  console.log('Selected file:', file)
+  console.log('Updated file list:', fileList.value)
+}
 // eslint-disable-next-line no-unused-vars
 const handleExceed = (files, fileList) => {
-  ElMessage.warning('替換新相片');
-  fileList.value = [];
+  ElMessage.warning('替換新相片')
+  fileList.value = []
 
   const uploadEvent = {
     file: files[0]
-  };
+  }
 
-  upload(uploadEvent);
-
-};
-const beforeUpload = file => {
+  upload(uploadEvent)
+}
+const beforeUpload = (file) => {
   const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
   if (!isJPG) {
     ElMessage.error('只能上傳 JPG/PNG 檔案')
@@ -486,7 +494,6 @@ const beforeUpload = file => {
   }
   return true
 }
-
 </script>
 
 <style scoped lang="scss">
