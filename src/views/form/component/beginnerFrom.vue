@@ -21,10 +21,12 @@
       <el-form-item label="姓名" prop="name" ref="nameRef">
         <el-input v-model="personalForm.name" :disabled="drawerProps.title === 'edit'" />
       </el-form-item>
-      <el-form-item label="性別">
+      <el-form-item label="性別與身份">
         <el-radio-group v-model="personalForm.gender">
           <el-radio-button label="male">男</el-radio-button>
           <el-radio-button label="female">女</el-radio-button>
+          <el-radio-button label="bhikkhu">比丘</el-radio-button>
+          <el-radio-button label="bhikkhuni">比丘尼</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="生日">
